@@ -1,5 +1,3 @@
-# webDevHomeWork04_SQLAlchemy
-```python
 
 from contextlib import contextmanager
 
@@ -124,9 +122,11 @@ with session_scope() as session:
 # продукты, включая их названия и цены.
 
 def get_all_categories_with_products():
+    print("\nЗадача 2: Чтение данных")
     with session_scope() as session:
         query = session.query(Category)
-        # print("raw query:", query, sep="\n")
+        print("raw query:", query, sep="\n")
+        print("result:")
         categories = query.all()
         for category in categories:
             print(category)
@@ -152,12 +152,14 @@ update_product_price_by_name("Смартфон", 349.99)
 # Используя агрегирующие функции и группировку, подсчитайте общее количество продуктов в каждой категории.
 
 def get_count_of_products_by_categories():
+    print("\nЗадача 4: Агрегация и группировка")
     with session_scope() as session:
         t1 = aliased(Category, name="t1")
         t2 = aliased(Product, name="t2")
         query = session.query(t1.name, func.count().label("count")).outerjoin(t2).group_by(t1.name) \
             .order_by(func.count().desc())
-        # print("raw query:", query, sep="\n")
+        print("raw query:", query, sep="\n")
+        print("result:")
         for i in query.all():
             print(f"{i.name}: {i.count}")
 
@@ -167,14 +169,15 @@ get_count_of_products_by_categories()
 # Отфильтруйте и выведите только те категории, в которых более одного продукта.
 
 def get_count_of_products_by_categories_gt_one():
+    print("\nЗадача 5: Группировка с фильтрацией")
     with session_scope() as session:
         t1 = aliased(Category, name="t1")
         t2 = aliased(Product, name="t2")
         query = session.query(t1.name, func.count().label("count")).outerjoin(t2).group_by(t1.name) \
             .having(func.count() > 1).order_by(func.count().desc())
-        # print("raw query:", query, sep="\n")
+        print("raw query:", query, sep="\n")
+        print("result:")
         for i in query.all():
             print(f"{i.name}: {i.count}")
 
 get_count_of_products_by_categories_gt_one()
-```
